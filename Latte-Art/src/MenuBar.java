@@ -1,6 +1,8 @@
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.swing.JFileChooser;
@@ -106,14 +108,70 @@ public class MenuBar extends JMenuBar {
         obraz.setMnemonic(KeyEvent.VK_O);
         
         obraz.add(MenuItem("Skaluj", KeyStroke.getKeyStroke(
-                KeyEvent.VK_S, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK), null));
+                KeyEvent.VK_S, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK), 
+                new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						BufferedImage img = MainWindow.getImagePanel().getImage();
+						BufferedImage res = ImagePanel.imageToBufferedImage(
+								img.getScaledInstance(
+								img.getWidth()/2, img.getHeight()/2, Image.SCALE_DEFAULT));
+						MainWindow.getImagePanel().setImage(res);
+					}
+				}));
         
         obraz.add(MenuItem("Przytnij", KeyStroke.getKeyStroke(
-                KeyEvent.VK_X, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK), null));
+                KeyEvent.VK_X, ActionEvent.CTRL_MASK | ActionEvent.SHIFT_MASK), 
+                new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						BufferedImage img = MainWindow.getImagePanel().getImage();
+						BufferedImage res = ImagePanel.imageToBufferedImage(
+								img.getSubimage(0, 0, img.getWidth()/2, img.getHeight()/2));
+						MainWindow.getImagePanel().setImage(res);
+					}
+				}));
         
         obraz.addSeparator();
         
-        obraz.add(MenuItem("Filtry", null, null));
+        obraz.add(MenuItem("Skala szarości", null, null));
+        
+        obraz.add(MenuItem("Rozmaż", null, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				BufferedImage img = MainWindow.getImagePanel().getImage();
+				BufferedImage res = new Blur().filter(img);
+				MainWindow.getImagePanel().setImage(res);
+			}
+		}));
+        
+        obraz.add(MenuItem("Wyostrz", null, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				BufferedImage img = MainWindow.getImagePanel().getImage();
+				BufferedImage res = new Sharpen().filter(img);
+				MainWindow.getImagePanel().setImage(res);
+			}
+		}));
+        
+        obraz.add(MenuItem("Kontrast", null, null));
+        
+        obraz.add(MenuItem("Odwróć kolory", null, new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				BufferedImage img = MainWindow.getImagePanel().getImage();
+				BufferedImage res = new Invert().filter(img);
+				MainWindow.getImagePanel().setImage(res);
+				
+			}
+		}));
+        
+        obraz.addSeparator();
         
         obraz.add(MenuItem("Transformacje", null, null));
         

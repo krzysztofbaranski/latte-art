@@ -12,6 +12,15 @@ public class ImagePanel extends JPanel{
 	
 	private BufferedImage image;
 	
+	public BufferedImage getImage() {
+		return image;
+	}
+	
+	public void setImage(BufferedImage image) {
+		this.image = image;
+		this.repaint();
+	}
+	
 	  public static BufferedImage imageToBufferedImage(Image im) {
 		     BufferedImage bi = new BufferedImage
 		        (im.getWidth(null),im.getHeight(null),BufferedImage.TYPE_INT_RGB);
